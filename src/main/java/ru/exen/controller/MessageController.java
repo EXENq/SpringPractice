@@ -1,10 +1,10 @@
 package ru.exen.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,59 +14,53 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ru.exen.exception.NotFoundException;
+import com.fasterxml.jackson.annotation.JsonView;
+
+import ru.exen.domain.Message;
+import ru.exen.domain.Views;
+import ru.exen.repo.MessageRepo;
 
 @RestController
 @RequestMapping("message")
 public class MessageController {
-	private int counter = 4;
+	private final MessageRepo messageRepo;
 	
-	private List<Map<String, String>> messagees = new ArrayList<Map<String, String>>() {{
-		add(new HashMap<String, String>() {{put("id", "1"); put("text", "First message"); }});
-		add(new HashMap<String, String>() {{put("id", "2"); put("text", "Second message"); }});
-		add(new HashMap<String, String>() {{put("id", "3"); put("text", "Third message"); }});
-	}};
-	
+	@Autowired
+	public MessageController(MessageRepo messageRepo) {
+		super();
+		this.messageRepo = messageRepo;
+	}
+
 	@GetMapping
-	public List<Map<String, String>> list() {
-		return messagees;
+	@JsonView(Views.IdName.class)
+	public List<Message> list() {
+		return messageRepo.findAll();
 	}
 	
 	@GetMapping("{id}")
-	public Map<String, String> getOne(@PathVariable String id){
-		return getMessage(id);
-	}
-
-	private Map<String, String> getMessage(String id) {
-		return messagees.stream()
-				.filter(message -> message.get("id").equals(id))
-				.findFirst()
-				.orElseThrow(NotFoundException::new);
-	}
-	
-	@PostMapping
-	public Map<String, String> create(@RequestBody Map<String, String> message){
-		message.put("id", String.valueOf(counter++));
-		
-		messagees.add(message);
-		
+	@JsonView(Views.FullMessage.class)
+	public Message getOne(@PathVariable("id") Message message){
 		return message;
 	}
 	
+	@PostMapping
+	public Message create(@RequestBody Message message){
+		message.setCreationTime(LocalDateTime.now());
+		return messageRepo.save(message);
+	}
+	
 	@PutMapping("{id}")
-	public Map<String, String> update(@PathVariable String id, @RequestBody Map<String, String> message){
-		Map<String, String> messageFromDb = getMessage(id);
+	public Message update(
+			@PathVariable("id") Message messageFromDb, 
+			@RequestBody Message message
+		){
+		BeanUtils.copyProperties(message, messageFromDb, "id");
 		
-		messageFromDb.putAll(message);
-		messageFromDb.put("id", id);
-		
-		return messageFromDb;
+		return messageRepo.save(messageFromDb);
 	}
 	
 	@DeleteMapping("{id}")
-	public void delete(@PathVariable String id) {
-		Map<String, String> message = getMessage(id);
-		
-		messagees.remove(message);
+	public void delete(@PathVariable("id") Message message) {
+		messageRepo.delete(message);
 	}
 }

@@ -23,6 +23,10 @@ dependencies {
 	compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.4.0-b180830.0359'
 	compile group: 'com.sun.xml.bind', name: 'jaxb-core', version: '3.0.0-M4'
 	compile group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '3.0.0-M4'
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.3.3.RELEASE'
+	compile group: 'org.springframework.security.oauth.boot', name: 'spring-security-oauth2-autoconfigure', version: '2.3.3.RELEASE'
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '2.3.3.RELEASE'
+	compile group: 'org.springframework.session', name: 'spring-session-jdbc', version: '2.3.0.RELEASE'
 	compileOnly 'org.projectlombok:lombok:1.18.12'
 	
 	
