@@ -1,6 +1,6 @@
 <template>
     <div style="position: relative; width: 300px;">
-        <!--<message-form :messages="messages" :messageAttr="message" />-->
+        <message-form :messages="messages" :messageAttr="message" />
         <message-row 
             v-for="message in messages" 
             :key="message.id" 
@@ -12,12 +12,14 @@
 </template>
 
 <script>
-    import MessaheRow from 'components/messages/MessageRow.vue'
+    import MessageRow from 'components/messages/MessageRow.vue'
+    import MessageForm from 'components/messages/MessageForm.vue'
 
     export default {
         props: ['messages'],
         components: {
-            MessageRow
+            MessageRow,
+            MessageForm
         },
         data() {
             return {
