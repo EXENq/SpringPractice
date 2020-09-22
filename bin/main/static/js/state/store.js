@@ -4,7 +4,7 @@ import messagesApi from 'api/messages'
 
 Vue.use(Vuex)
 
-export default store = new Vuex.Store({
+export default new Vuex.Store({
 	state: {
 		messages: frontendData.messages,
 		profile: frontendData.profile
@@ -20,7 +20,7 @@ export default store = new Vuex.Store({
 			]
 		},
 		updateMessageMutation(state, message){
-			const upadateIndex = state.messages.findIndex(item => item.id === id)
+			const upadateIndex = state.messages.findIndex(item => item.id === message.id)
 			//находит нужный индекс, разбивает массив на части, 
 			//ставит изменённое сообщение на нужный индекс, дальше разбивает на части
 			state.messages = [
@@ -30,7 +30,7 @@ export default store = new Vuex.Store({
 			]
 		},
 		removeMessageMutation(state, message){
-			const deleteIndex = state.messages.findIndex(item => item.id === id)
+			const deleteIndex = state.messages.findIndex(item => item.id === message.id)
 
 			if (deleteIndex > -1) {
 				state.messages = [
@@ -41,10 +41,10 @@ export default store = new Vuex.Store({
 		}
 	},
 	actions: {
-		async addMessageAction({commit}, message){
+		async addMessageAction({commit, state}, message){
 			const result = await messagesApi.add(message)
 			const data = await result.json()
-			const index = this.messages.findIndex(item => item.id === data.id)
+			const index = state.messages.findIndex(item => item.id === data.id)
 
 			if (index > -1) {
 				commit('updateMessageMutation', data)
@@ -56,13 +56,12 @@ export default store = new Vuex.Store({
 			const result = await messagesApi.update(message)
 			const data = await result.json()
 			commit('updateMessageMutation', data)
-			this.messages.splice(index, 1, data)
 		},
 		async removeMessageAction({commit}, message){
 			const result = await messagesApi.remove(message.id)
 			
 				if (result.ok) {
-					commit('removeMutation', message)
+					commit('removeMessageMutation', message)
 			}
 		},
 	}
