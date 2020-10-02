@@ -1,4 +1,4 @@
-package ru.exen.domain;
+ package ru.exen.domain;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -20,6 +21,7 @@ import lombok.ToString;
 @Table
 @ToString(of = {"id", "text"})
 @EqualsAndHashCode(of = "id")
+@Data
 public class Message {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,24 +35,12 @@ public class Message {
 	@JsonView(Views.FullMessage.class)
 	private LocalDateTime creationTime;
 	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getText() {
-		return text;
-	}
-	public void setText(String text) {
-		this.text = text;
-	}
-	public LocalDateTime getCreationTime() {
-		return creationTime;
-	}
-	public void setCreationTime(LocalDateTime creationTime) {
-		this.creationTime = creationTime;
-	}
-	
-	
+	@JsonView(Views.FullMessage.class)
+	private String link;
+	@JsonView(Views.FullMessage.class)
+	private String linkTitle;
+	@JsonView(Views.FullMessage.class)
+	private String linkDescription;
+	@JsonView(Views.FullMessage.class)
+	private String linkCover;
 }
