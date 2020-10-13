@@ -10,34 +10,45 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+
 import ru.exen.domain.User;
+import ru.exen.domain.Views;
 import ru.exen.repo.MessageRepo;
 
 @Controller
 @RequestMapping("/")
 public class MainController {
 	private final MessageRepo messageRepo;
-	
+
 	@Value("${spring.profiles.active}")
 	private String profile;
-	
+	private final ObjectWriter writer;
+
 	@Autowired
-	public MainController(MessageRepo messageRepo) {
+	public MainController(MessageRepo messageRepo, ObjectMapper mapper) {
 		this.messageRepo = messageRepo;
+
+		this.writer = mapper.setConfig(mapper.getSerializationConfig()).writerWithView(Views.FullMessage.class);
 	}
 
 	@GetMapping
-	public String main(Model model, @AuthenticationPrincipal User user) {
+	public String main(Model model, @AuthenticationPrincipal User user) throws JsonProcessingException {
 		HashMap<Object, Object> data = new HashMap<>();
-		
-		if(user != null) {
-		data.put("profile", user);
-		data.put("messages", messageRepo.findAll());
+
+		if (user != null) {
+			data.put("profile", user);
+			String messages = writer.writeValueAsString(messageRepo.findAll());
+			model.addAttribute("messages", messages);
+		} else {
+			model.addAttribute("messages", "[]");
 		}
-		
+
 		model.addAttribute("frontendData", data);
 		model.addAttribute("isDevMode", "dev".equals(profile));
-		
+
 		return "index";
 	}
 }

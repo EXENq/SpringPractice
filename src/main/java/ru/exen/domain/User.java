@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import lombok.Data;
 
@@ -16,8 +17,11 @@ import lombok.Data;
 @Data
 public class User implements Serializable {
 	@Id
+	@JsonView(Views.IdName.class)
 	private String id;
+	@JsonView(Views.IdName.class)
 	private String name;
+	@JsonView(Views.IdName.class)
 	private String userpic;
 	private String email;
 	private String gender;

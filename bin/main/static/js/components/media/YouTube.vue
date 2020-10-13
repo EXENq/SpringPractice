@@ -16,7 +16,7 @@
         props: ['src'],
         computed: {
             targetSrc() {
-                let parts = src.split('/')
+                let parts = this.src.split('/')
                 return `https://www.youtube.com/embed/${parts[parts.length - 1]}`
             }
         }
