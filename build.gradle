@@ -27,7 +27,6 @@ dependencies {
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.3.3.RELEASE'
 	compile group: 'org.springframework.security.oauth.boot', name: 'spring-security-oauth2-autoconfigure', version: '2.3.3.RELEASE'
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '2.3.3.RELEASE'
-	compile group: 'org.springframework.session', name: 'spring-session-jdbc', version: '2.3.0.RELEASE'
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-websocket', version: '2.3.3.RELEASE'
 	compile group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
 	compileOnly 'org.projectlombok:lombok:1.18.12'

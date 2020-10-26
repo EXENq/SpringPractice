@@ -9,7 +9,7 @@ import { connect } from 'util/ws.js'
 import 'vuetify/dist/vuetify.min.css'
 
 
-if (frontendData.profile) {
+if (profile) {
     connect();
 } 
 

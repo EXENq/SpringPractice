@@ -1,5 +1,5 @@
 const path = require('path');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin.js');
 
 module.exports = {
     mode: 'development',
@@ -12,7 +12,6 @@ module.exports = {
         allowedHosts: [
             'localhost:9000'
         ],
-        stats: 'errors-only',
         clientLogLevel: 'error',
     },
     module: {

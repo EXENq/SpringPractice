@@ -37,7 +37,7 @@
                 } else {
                     this.addMessageAction(message)
                 }
-                this.text = '',
+                this.text = ''
                 this.id = null
             }
         }
