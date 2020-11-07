@@ -1,16 +1,17 @@
 <template>
-   <v-container>
+    <v-container>
         <v-layout justify-space-around>
             <v-list>
                 <v-list-item
                     v-for="item in subscriptions"
                 >
                     <user-link
-                        :user="item.subscriber"
-                        size="24"
+                            :user="item.subscriber"
+                            size="24"
                     ></user-link>
+
                     <v-btn
-                        @click="changeUserSubscriptionStatus(item.subscriberId)"
+                        @click="changeSubscriptionStatus(item.subscriber.id)"
                     >
                         {{item.active ? "Dismiss" : "Approve"}}
                     </v-btn>
@@ -18,28 +19,25 @@
             </v-list>
         </v-layout>
     </v-container>
-
 </template>
 
 <script>
+    import profileApi from 'api/profile'
     import UserLink from 'components/UserLink.vue'
-    import profileApi from 'api/profile.js';
-
     export default {
         name: 'Subscriptions',
-        components: {
-            UserLink,
-        },
+        components: {UserLink},
         data() {
             return {
-               subscriptions: []
+                subscriptions: []
             }
         },
         methods: {
-            async changeUserSubscriptionStatus(subscriberId) {
-                await profileApi.changeUserSubscriptionStatus(subscriberId)
-
-                const subscriptionIndex = this.subscriptions.findIndex(item => item.subscriber.id === subscriberId)
+            async changeSubscriptionStatus(subscriberId) {
+                await profileApi.changeSubscriptionStatus(subscriberId)
+                const subscriptionIndex = this.subscriptions.findIndex(item =>
+                    item.subscriber.id === subscriberId
+                )
                 const subscription = this.subscriptions[subscriptionIndex]
                 this.subscriptions = [
                     ...this.subscriptions.slice(0, subscriptionIndex),
@@ -51,13 +49,12 @@
                 ]
             }
         },
-        async beforeMount () {
+        async beforeMount() {
             const resp = await profileApi.subscriberList(this.$store.state.profile.id)
             this.subscriptions = await resp.json()
-        },
+        }
     }
 </script>
 
 <style scoped>
-
 </style>

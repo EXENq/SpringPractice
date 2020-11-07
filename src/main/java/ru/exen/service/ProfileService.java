@@ -43,11 +43,11 @@ public class ProfileService {
 		return userSubscriptionRepo.findByChannel(channel);
 	}
 
-	 public UserSubscription changeSubscriptionStatus(User channel, User subscriber) {
-	        UserSubscription subscription = userSubscriptionRepo.findByChannelAndSubscriber(channel, subscriber);
-	        subscription.setActive(!subscription.isActive());
+	public UserSubscription changeSubscriptionStatus(User channel, User subscriber) {
+        UserSubscription subscription = userSubscriptionRepo.findByChannelAndSubscriber(channel, subscriber);
+        subscription.setActive(!subscription.isActive());
 
-	        return userSubscriptionRepo.save(subscription);
+        return userSubscriptionRepo.save(subscription);
 	    }
 	
 }

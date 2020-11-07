@@ -30,6 +30,7 @@
                         </v-layout>
                     </v-flex>
                 </v-layout>
+                hello
                 <v-btn
                         v-if="!isMyProfile"
                         @click="changeSubscription"
